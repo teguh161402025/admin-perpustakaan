@@ -86,7 +86,7 @@ export const Navigation = () => {
                     </div>
                 </div>
 
-                <div className='mt-16'>
+                <div className='mt-8'>
                     <div className='flex p-2 space-x-4 ml-4'>
                         <FaCircleNotch className='my-[4px]' color='#8fce00' size={18} />
                         <label className='text-black font-bold'>Buku</label>
@@ -116,7 +116,7 @@ export const Navigation = () => {
 
                     </div>
                 </div>
-                <div className='mt-16'>
+                <div className='mt-8'>
                     <div className='flex p-2 space-x-4 ml-4'>
                         <FaCircleNotch className='my-[4px]' color='#765cb9' size={18} />
                         <label className='text-black font-bold'>Laporan</label>
@@ -138,7 +138,7 @@ export const Navigation = () => {
                     </div>
                 </div>
 
-                <div className='mt-16'>
+                <div className='mt-8'>
                     <div className='flex p-2 space-x-4 ml-4'>
                         <FaCircleNotch className='my-[4px]' color='#e69138' size={18} />
                         <label className='text-black font-bold'>User</label>
