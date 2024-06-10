@@ -21,7 +21,7 @@ export const Navigation = () => {
 
         <>
 
-            <div className='w-[15%] fixed bg-white border-r-[1px] border-gray-200  min-h-screen text-blue-900 text-xl'>
+            <div className='w-[15%] fixed bg-white border-r-[1px] border-gray-200  min-h-screen text-blue-900 text-lg'>
                 <div className='p-12'>
                     Selamat Datang,
                     Admin
