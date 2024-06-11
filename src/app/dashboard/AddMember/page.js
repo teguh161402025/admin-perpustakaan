@@ -18,6 +18,7 @@ import {
 } from "firebase/auth";
 import { Password } from 'primereact/password';
 import { Toast } from 'primereact/toast';
+
 import { auth, db, storage } from '../../../../firebase';
 const AddMember = () => {
     const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
@@ -36,7 +37,14 @@ const AddMember = () => {
                 data.email,
                 data.password
             )
-
+            addDoc(collection(db, "User"), {
+                name: data.name,
+                grade: data.grade,
+                email: data.email,
+                gender: data.gender,
+                phone: data.phone,
+                address: data.address,
+            });
             showSuccess();
             reset();
         } catch (error) {
@@ -72,10 +80,36 @@ const AddMember = () => {
                     <label htmlFor="grade" className="block text-black font-bold mb-2">
                         Kelas
                     </label>
-                    <InputText
-                        id="grade"
-                        {...register('grade', { required: 'Kelas harus diisi' })}
-                        className={`w-full p-2 rounded-lg border-2 ${errors.grade ? 'border-red-500' : 'border-gray-300'}`}
+                    <Controller
+                        name="grade"
+                        control={control}
+                        rules={{ required: 'Kelas harus dipilih' }}
+                        render={({ field }) => (
+                            <Dropdown
+                                id="grade"
+                                value={field.value}
+                                onChange={(e) => field.onChange(e.value)}
+                                options={[
+                                    { label: 'SMP Kelas 7', value: 'SMP Kelas 7' },
+                                    { label: 'SMP Kelas 8', value: 'SMP Kelas 8' },
+                                    { label: 'SMP Kelas 9', value: 'SMP Kelas 9' },
+                                    { label: 'SMK TKJ Kelas 10', value: 'SMK TKJ Kelas 10' },
+                                    { label: 'SMK TBSM Kelas 10', value: 'SMK TBSM Kelas 10' },
+                                    { label: 'SMK TKJ Kelas 11', value: 'SMK TKJ Kelas 11' },
+                                    { label: 'SMK TBSM Kelas 11', value: 'SMK TBSM Kelas 11' },
+                                    { label: 'SMK TKJ Kelas 12', value: 'SMK TKJ Kelas 12' },
+                                    { label: 'SMK TBSM Kelas 12', value: 'SMK TBSM Kelas 12' },
+                                    { label: 'SMA IPS Kelas 10', value: 'SMA IPS Kelas 10' },
+                                    { label: 'SMA IPA Kelas 10', value: 'SMA IPA Kelas 10' },
+                                    { label: 'SMA IPS Kelas 11', value: 'SMA IPS Kelas 11' },
+                                    { label: 'SMA IPA Kelas 11', value: 'SMA IPA Kelas 11' },
+                                    { label: 'SMA IPS Kelas 12', value: 'SMA IPS Kelas 12' },
+                                    { label: 'SMA IPA Kelas 12', value: 'SMA IPA Kelas 12' },
+                                ]}
+                                placeholder="Pilih Kelas"
+                                className={`w-full p-2 rounded-lg border-2 ${errors.grade ? 'border-red-500' : 'border-gray-300'}`}
+                            />
+                        )}
                     />
                     {errors.grade && <p className="text-red-500">{errors.grade.message}</p>}
                 </div>
