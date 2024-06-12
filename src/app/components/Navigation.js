@@ -22,7 +22,7 @@ export const Navigation = () => {
         <>
 
             <div className='w-[15%] fixed bg-white border-r-[1px] border-gray-100  min-h-screen text-blue-900 text-md'>
-                <div className='p-12'>
+                <div className='p-4'>
                     Selamat Datang,
                     Admin
                 </div>
@@ -87,7 +87,7 @@ export const Navigation = () => {
                         </div>
                     </div>
 
-                    <div className='mt-8'>
+                    <div className='mt-2'>
                         <div className='flex p-2 space-x-4 ml-4 '>
                             <FaCircleNotch className='my-[4px]' color='#8fce00' size={18} />
                             <label className='text-black font-bold text-md'>Buku</label>
@@ -117,7 +117,7 @@ export const Navigation = () => {
 
                         </div>
                     </div>
-                    <div className='mt-8'>
+                    <div className='mt-2'>
                         <div className='flex p-2 space-x-4 ml-4'>
                             <FaCircleNotch className='my-[4px]' color='#765cb9' size={18} />
                             <label className='text-black font-bold text-md'>Laporan</label>
@@ -139,7 +139,7 @@ export const Navigation = () => {
                         </div>
                     </div>
 
-                    <div className='mt-8'>
+                    <div className='mt-2'>
                         <div className='flex p-2 space-x-4 ml-4'>
                             <FaCircleNotch className='my-[4px]' color='#e69138' size={18} />
                             <label className='text-black font-bold text-md'>User</label>
