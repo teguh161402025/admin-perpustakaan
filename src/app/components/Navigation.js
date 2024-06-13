@@ -21,8 +21,8 @@ export const Navigation = () => {
 
         <>
 
-            <div className='w-[15%] fixed bg-white border-r-[1px] border-gray-100  min-h-screen text-blue-900 text-md'>
-                <div className='p-4'>
+            <div className='w-[15%] fixed bg-white border-r-[1px] border-gray-100  min-h-screen text-blue-900 text-sm'>
+                <div className='p-4 text-sm'>
                     Selamat Datang,
                     Admin
                 </div>
@@ -30,7 +30,7 @@ export const Navigation = () => {
                     <div>
                         <div className='flex p-2 space-x-4 ml-4'>
                             <FaCircleNotch className='my-[4px]' color='#14629c' size={18} />
-                            <label className='text-black font-bold text-md'>Dashboard</label>
+                            <label className='text-black font-bold text-sm'>Dashboard</label>
                         </div>
 
                         <div className='text-gray-500 2xl:text-sm md:text-[10px] font-semibold pl-[17%]'>
@@ -90,7 +90,7 @@ export const Navigation = () => {
                     <div className='mt-2'>
                         <div className='flex p-2 space-x-4 ml-4 '>
                             <FaCircleNotch className='my-[4px]' color='#8fce00' size={18} />
-                            <label className='text-black font-bold text-md'>Buku</label>
+                            <label className='text-black font-bold text-sm'>Buku</label>
                         </div>
 
                         <div className='text-gray-500 2xl:text-sm md:text-[10px] font-semibold pl-[17%]'>
@@ -120,7 +120,7 @@ export const Navigation = () => {
                     <div className='mt-2'>
                         <div className='flex p-2 space-x-4 ml-4'>
                             <FaCircleNotch className='my-[4px]' color='#765cb9' size={18} />
-                            <label className='text-black font-bold text-md'>Laporan</label>
+                            <label className='text-black font-bold text-sm'>Laporan</label>
                         </div>
 
                         <div className='text-gray-500 2xl:text-sm md:text-[10px] font-semibold pl-[17%]'>
@@ -142,7 +142,7 @@ export const Navigation = () => {
                     <div className='mt-2'>
                         <div className='flex p-2 space-x-4 ml-4'>
                             <FaCircleNotch className='my-[4px]' color='#e69138' size={18} />
-                            <label className='text-black font-bold text-md'>User</label>
+                            <label className='text-black font-bold text-sm'>User</label>
                         </div>
 
                         <div className='text-gray-500 2xl:text-sm md:text-[10px] font-semibold pl-[17%]'>
