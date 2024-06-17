@@ -223,17 +223,19 @@ const Addbook = () => {
 
                     <div className="mb-4">
                         <label htmlFor="releaseDate" className="block text-gray-700 font-bold mb-2">
-                            Tanggal Rilis
+                            Tahun Rilis
                         </label>
                         <Controller
                             name="releaseDate"
                             control={control}
-                            rules={{ required: 'Tanggal rilis wajib diisi' }}
+                            rules={{ required: 'Tahun rilis wajib diisi' }}
                             render={({ field }) => (
-                                <Calendar
+                                <input
                                     id="releaseDate"
+                                    type="number"
+                                    min="1900"
+                                    max="2099"
                                     {...field}
-                                    dateFormat="yy-mm-dd"
                                     className="w-full p-2 border border-gray-300 rounded-md"
                                 />
                             )}
