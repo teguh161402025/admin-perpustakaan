@@ -26,22 +26,32 @@ const EditBook = ({ searchParams }) => {
         const fetchBookData = async () => {
             try {
                 setIsLoading(true); // Set isLoading menjadi true sebelum memulai fetch data
-                const bookRef = doc(db, "Books", searchParams.search);
-                const bookSnapshot = await getDoc(bookRef);
 
-                if (bookSnapshot.exists()) {
-                    const bookData = bookSnapshot.data();
-                    setValue("title", bookData.title);
-                    setValue("category", bookData.category);
-                    setValue("description", bookData.description);
-                    setImageBase64(bookData.image);
-                    setValue("author", bookData.author);
-                    setValue("synopsis", bookData.synopsis);
-                    setValue("stock", bookData.stock);
-                    setValue("publisher", bookData.publisher);
-                    setValue("releaseDate", new Date(bookData.releaseDate));
-                    console.log(JSON.stringify(bookData));
+                const docRef = doc(db, "Books", searchParams.search);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const bookData = { ...docSnap.data(), id: docSnap.id };
+                    if (bookData) {
+
+                        setValue("title", bookData.title);
+                        setValue("category", bookData.category);
+                        setValue("description", bookData.description);
+                        setImageBase64(bookData.image);
+                        setValue("author", bookData.author);
+                        setValue("synopsis", bookData.synopsis);
+                        setValue("stock", bookData.stock);
+                        setValue("publisher", bookData.publisher);
+                        setValue("releaseDate", new Date(bookData.releaseDate));
+                        console.log(JSON.stringify(bookData));
+                    }
+
+                } else {
+                    console.log("Document not found!");
                 }
+
+                setIsLoading(false);
+
             } catch (error) {
                 console.error("Error fetching book data:", error);
                 // Tambahkan logika untuk menangani kesalahan, misalnya menampilkan pesan kesalahan
