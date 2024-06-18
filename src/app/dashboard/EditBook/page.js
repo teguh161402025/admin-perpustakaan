@@ -15,21 +15,25 @@ import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { Image } from 'primereact/image';
 import Spinner from '@/app/components/Spinner';
-const EditBook = ({ searchParams }) => {
+import { useSearchParams } from 'next/navigation'
+const EditBook = () => {
     const { control, handleSubmit, setValue, formState: { errors } } = useForm();
     const [imageBase64, setImageBase64] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const toast = useRef(null);
-
+    const searchParams = useSearchParams()
     useEffect(() => {
+
         const fetchBookData = async () => {
 
-            console.log(searchParams.search)
+
+            const search = searchParams.get('search')
+            console.log(search)
             try {
                 setIsLoading(true); // Set isLoading menjadi true sebelum memulai fetch data
 
-                const docRef = doc(db, "Books", searchParams.search);
+                const docRef = doc(db, "Books", search);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
