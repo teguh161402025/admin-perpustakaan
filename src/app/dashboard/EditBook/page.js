@@ -14,6 +14,7 @@ import { Calendar } from 'primereact/calendar';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { Image } from 'primereact/image';
+import Spinner from '@/app/components/Spinner';
 const EditBook = ({ searchParams }) => {
     const { control, handleSubmit, setValue, formState: { errors } } = useForm();
     const [imageBase64, setImageBase64] = useState('');
@@ -23,21 +24,32 @@ const EditBook = ({ searchParams }) => {
 
     useEffect(() => {
         const fetchBookData = async () => {
-            const bookRef = doc(db, "Books", searchParams.search);
-            const bookSnapshot = await getDoc(bookRef);
-            if (bookSnapshot.exists()) {
-                const bookData = bookSnapshot.data();
-                setValue("title", bookData.title);
-                setValue("category", bookData.category);
-                setValue("description", bookData.description);
-                setImageBase64(bookData.image);
-                setValue("author", bookData.author);
-                setValue("synopsis", bookData.synopsis);
-                setValue("stock", bookData.stock);
-                setValue("publisher", bookData.publisher);
-                setValue("releaseDate", new Date(bookData.releaseDate));
+            try {
+                setIsLoading(true); // Set isLoading menjadi true sebelum memulai fetch data
+                const bookRef = doc(db, "Books", searchParams.search);
+                const bookSnapshot = await getDoc(bookRef);
+
+                if (bookSnapshot.exists()) {
+                    const bookData = bookSnapshot.data();
+                    setValue("title", bookData.title);
+                    setValue("category", bookData.category);
+                    setValue("description", bookData.description);
+                    setImageBase64(bookData.image);
+                    setValue("author", bookData.author);
+                    setValue("synopsis", bookData.synopsis);
+                    setValue("stock", bookData.stock);
+                    setValue("publisher", bookData.publisher);
+                    setValue("releaseDate", new Date(bookData.releaseDate));
+                    console.log(JSON.stringify(bookData));
+                }
+            } catch (error) {
+                console.error("Error fetching book data:", error);
+                // Tambahkan logika untuk menangani kesalahan, misalnya menampilkan pesan kesalahan
+            } finally {
+                setIsLoading(false); // Set isLoading menjadi false setelah proses selesai, baik sukses atau gagal
             }
         };
+
         fetchBookData();
     }, [setValue]);
 
@@ -89,6 +101,9 @@ const EditBook = ({ searchParams }) => {
 
     return (
         <div>
+            {
+                isLoading && <Spinner />
+            }
             <Toast ref={toast} />
             <div className=" m-6">
                 <h2 className="text-2xl font-bold mb-4 text-blue-950">Edit Buku</h2>
