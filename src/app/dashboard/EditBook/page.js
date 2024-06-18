@@ -48,7 +48,7 @@ const EditBook = () => {
                     setValue("synopsis", bookData.synopsis);
                     setValue("stock", bookData.stock);
                     setValue("publisher", bookData.publisher);
-                    setValue("releaseDate", new Date(bookData.releaseDate));
+                    setValue("releaseDate", bookData.releaseDate);
                     console.log(JSON.stringify(bookData));
 
 
@@ -255,16 +255,24 @@ const EditBook = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="releaseDate" className="block text-gray-700font-bold mb-2">
-                            Tanggal Rilis
+                        <label htmlFor="releaseDate" className="block text-gray-700 font-bold mb-2">
+                            Tahun Rilis
                         </label>
                         <Controller
                             name="releaseDate"
                             control={control}
-                            rules={{ required: 'Tanggal rilis wajib diisi' }}
+                            rules={{ required: 'Tahun rilis wajib diisi' }}
                             render={({ field, fieldState }) => (
                                 <>
-                                    <Calendar id={field.name} {...field} dateFormat="dd/mm/yy" mask="99/99/9999" showIcon className=' border border-gray-400 rounded-md p-2' />
+                                    <InputNumber
+                                        id={field.name}
+                                        {...field}
+                                        min={1900}
+                                        max={2100}
+                                        allowEmptyString={true}
+                                        useGrouping={false}
+                                        className="w-full border p-2 border-gray-400"
+                                    />
                                     {fieldState.error && <span className="text-red-500">{fieldState.error.message}</span>}
                                 </>
                             )}
