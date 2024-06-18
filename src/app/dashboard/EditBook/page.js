@@ -24,6 +24,8 @@ const EditBook = ({ searchParams }) => {
 
     useEffect(() => {
         const fetchBookData = async () => {
+
+            console.log(searchParams.search)
             try {
                 setIsLoading(true); // Set isLoading menjadi true sebelum memulai fetch data
 
