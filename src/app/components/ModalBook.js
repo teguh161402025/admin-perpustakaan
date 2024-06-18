@@ -37,7 +37,7 @@ const ModalBook = ({ id, visible, onClose }) => {
 
     }, [id]);
     return (
-        <Dialog header="Header" visible={visible} style={{ width: '30vw' }} onHide={onClose}>
+        <Dialog header="Header" visible={visible} style={{ width: '70vw' }} onHide={onClose}>
             {
                 isLoading && <Spinner />
             }
