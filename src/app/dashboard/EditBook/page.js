@@ -32,19 +32,19 @@ const EditBook = ({ searchParams }) => {
 
                 if (docSnap.exists()) {
                     const bookData = { ...docSnap.data(), id: docSnap.id };
-                    if (bookData) {
 
-                        setValue("title", bookData.title);
-                        setValue("category", bookData.category);
-                        setValue("description", bookData.description);
-                        setImageBase64(bookData.image);
-                        setValue("author", bookData.author);
-                        setValue("synopsis", bookData.synopsis);
-                        setValue("stock", bookData.stock);
-                        setValue("publisher", bookData.publisher);
-                        setValue("releaseDate", new Date(bookData.releaseDate));
-                        console.log(JSON.stringify(bookData));
-                    }
+
+                    setValue("title", bookData.title);
+                    setValue("category", bookData.category);
+                    setValue("description", bookData.description);
+                    setImageBase64(bookData.image);
+                    setValue("author", bookData.author);
+                    setValue("synopsis", bookData.synopsis);
+                    setValue("stock", bookData.stock);
+                    setValue("publisher", bookData.publisher);
+                    setValue("releaseDate", new Date(bookData.releaseDate));
+                    console.log(JSON.stringify(bookData));
+
 
                 } else {
                     console.log("Document not found!");
