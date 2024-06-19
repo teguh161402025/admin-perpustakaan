@@ -71,18 +71,14 @@ const EditBook = () => {
 
     const onSubmit = async (data) => {
 
-        const timestamp = new Date(data.releaseDate);
-        const year = timestamp.getFullYear();
-        const month = String(timestamp.getMonth() + 1).padStart(2, '0'); // Bulan di JavaScript dimulai dari 0
-        const day = String(timestamp.getDate()).padStart(2, '0');
-        const formattedDate = `${year}-${month}-${day}`;
-        const formData = { ...data, image: imageBase64, releaseDate: formattedDate };
-        const bookRef = doc(db, "Books", searchParams.search);
+        const search = searchParams.get('search')
+        const formData = { ...data, image: imageBase64 };
+        const bookRef = doc(db, "Books", search);
         setIsLoading(true);
         try {
             await updateDoc(bookRef, formData);
             toast.current.show({ severity: 'success', summary: 'Berhasil', detail: 'Buku berhasil diperbarui', life: 3000 });
-            router.push('/books');
+
         } catch (error) {
             console.log(error.message);
         } finally {
@@ -230,7 +226,7 @@ const EditBook = () => {
                             rules={{ required: 'Stok wajib diisi', min: { value: 0, message: 'Stok tidak boleh negatif' } }}
                             render={({ field, fieldState }) => (
                                 <>
-                                    <InputNumber id={field.name} {...field} className="w-full border p-2 border-gray-400" />
+                                    <input type="number" id={field.name} {...field} className="w-full border p-2 border-gray-400" />
                                     {fieldState.error && <span className="text-red-500">{fieldState.error.message}</span>}
                                 </>
                             )}
@@ -264,14 +260,14 @@ const EditBook = () => {
                             rules={{ required: 'Tahun rilis wajib diisi' }}
                             render={({ field, fieldState }) => (
                                 <>
-                                    <InputNumber
+                                    <input
+                                        type="number"
                                         id={field.name}
                                         {...field}
                                         min={1900}
                                         max={2100}
-                                        allowEmptyString={true}
-                                        useGrouping={false}
                                         className="w-full border p-2 border-gray-400"
+                                        required // Menambahkan atribut required untuk mencegah nilai kosong
                                     />
                                     {fieldState.error && <span className="text-red-500">{fieldState.error.message}</span>}
                                 </>
