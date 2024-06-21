@@ -114,7 +114,7 @@ const Confirmation = () => {
         const ref = doc(db, "peminjaman", id);
         try {
             await updateDoc(ref, {
-                status: 'Dipinjam',
+                status: 'Disetujui',
                 tenggat: tenggat,
                 pengambilan: getCurrentDateString()
 
