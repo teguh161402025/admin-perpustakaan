@@ -5,7 +5,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { auth, db, storage } from '../../../firebase';
-import { collection, doc, getDocs, setDoc, getDoc, addDoc, onSnapshot, deleteDoc, query, where, updateDoc, arrayUnion } from 'firebase/firestore'
+import { collection, doc, getDocs, setDoc, getDoc, addDoc, onSnapshot, deleteDoc, query, where, updateDoc, arrayUnion, count } from 'firebase/firestore'
 import ToastComponent from '@/app/components/Toast';
 import ModalBook from '../components/ModalBook';
 const Home = () => {
@@ -72,10 +72,68 @@ const Home = () => {
             }
         };
 
+
+
         getDataPeminjaman();
 
     }, []);
+    const getDataPeminjamanCount = async () => {
 
+        const q = query(collection(db, 'peminjaman'), where('status', '==', 'Dipinjam'));
+        try {
+            const querySnapshot = await getDocs(q);
+            const count = querySnapshot.size;
+
+            return count;
+        } catch (error) {
+            console.error('Error counting documents:', error);
+            return 0;
+        }
+    }
+
+    const getDataBukuCount = async () => {
+
+        const q = collection(db, 'Books');
+        try {
+            const querySnapshot = await getDocs(q);
+            const count = querySnapshot.size;
+
+            return count;
+        } catch (error) {
+            console.error('Error counting documents:', error);
+            return 0;
+        }
+    }
+
+
+    const getDataKonfirmasiCount = async () => {
+
+        const q = query(collection(db, 'peminjaman'), where('status', '==', 'Menunggu Konfirmasi'));
+        try {
+            const querySnapshot = await getDocs(q);
+            const count = querySnapshot.size;
+
+            return count;
+        } catch (error) {
+            console.error('Error counting documents:', error);
+            return 0;
+        }
+    }
+
+
+    const getDataPerpanjanganCount = async () => {
+
+        const q = query(collection(db, 'peminjaman'), where('status', '==', 'Menunggu Konfirmasi Perpanjangan'));
+        try {
+            const querySnapshot = await getDocs(q);
+            const count = querySnapshot.size;
+
+            return count;
+        } catch (error) {
+            console.error('Error counting documents:', error);
+            return 0;
+        }
+    }
     function stringToDate(dateString) {
         return new Date(dateString);
     }
@@ -176,6 +234,73 @@ const Home = () => {
                     onClose={closeModal}
                 />
             }
+
+            <div className='flex flex-row w-full '>
+                <div className='w-1/3 h-44 bg-blue-600 m-4 rounded-md  text-white p-4'>
+                    <p className='text-md font-bold'>Buku </p>
+                    <div className='text-sm font-semibold p-6 space-y-2'>
+                        <div className='flex justify-between'>
+                            <p className='text-md'>Total Buku</p>
+                            <div>
+                                {
+                                    getDataBukuCount()
+                                }
+                            </div>
+                        </div>
+                        <div className='flex justify-between'>
+                            <p className='text-sm'>Total Buku Dipinjam</p>
+                            <div>
+                                {
+                                    getDataPeminjamanCount()
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className='w-1/3 h-44 bg-lime-600 m-4 rounded-md  text-white p-4'>
+                    <p className='text-md font-bold'>Notifikasi</p>
+                    <div className='text-sm font-semibold p-6 space-y-2'>
+                        <div className='flex justify-between'>
+                            <p className='text-md'>Menunggu Konfirmasi Peminjaman</p>
+                            <div>
+                                {
+                                    getDataKonfirmasiCount()
+                                }
+
+                            </div>
+                        </div>
+                        <div className='flex justify-between'>
+                            <p className='text-sm'>Menunggu Konfirmasi Perpanjangan</p>
+                            <div>
+                                {
+                                    getDataPerpanjanganCount()
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div className='w-1/3 h-44 bg-red-600 m-4 rounded-md  text-white p-4'>
+                    <p className='text-md font-bold'>Denda</p>
+                    <div className='text-sm font-semibold p-6 space-y-2'>
+                        <div className='flex justify-between'>
+                            <p className='text-sm'>Total Keterlambatan</p>
+                            <div>
+                                {
+                                    dataPeminjaman.filter(a => isDatePassed(a.tenggat) == true).length
+                                }
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
             <div className="border border-gray-200 border-rounded rounded-md m-4 p-4">
                 <DataTable
                     value={dataPeminjaman}

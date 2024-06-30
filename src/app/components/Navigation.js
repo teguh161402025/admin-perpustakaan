@@ -41,7 +41,7 @@ export const Navigation = () => {
                                         }`}
                                 >
                                     <FaThLarge size={18} className=' ' />
-                                    <div>Peminjaman</div>
+                                    <div>Dahsboard</div>
                                 </div>
                             </Link>
                             <Link href={'/dashboard/Confirmation'}>
@@ -153,7 +153,18 @@ export const Navigation = () => {
                                         }`}
                                 >
                                     <FaUserPlus size={18} className=' ' />
-                                    <div>Buat Akun Baru</div>
+                                    <div>Buat Akun User</div>
+                                </div>
+                            </Link>
+
+                            <Link href={'/dashboard/AddPetugas'}>
+                                <div
+                                    className={`flex flex-row rounded-l-xl pl-4 space-x-6 p-2   hover:border-r-4 hover:border-r-orange-600 hover:bg-orange-100 hover:text-orange-600 transition-color duration-100 ease-in-out cursor-pointer
+                         ${currentPath === '/dashboard/AddPetugas' ? 'border-r-4 border-r-orange-600 bg-orange-100 text-orange-600' : ''
+                                        }`}
+                                >
+                                    <FaUserPlus size={18} className=' ' />
+                                    <div>Buat Akun Petugas</div>
                                 </div>
                             </Link>
                             <div onClick={onSubmit}

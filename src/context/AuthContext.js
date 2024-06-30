@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
     }, [router]);
 
     const login = async (email, password) => {
+
         try {
             await signInWithEmailAndPassword(auth, email, password);
             // onAuthStateChanged akan menangani navigasi

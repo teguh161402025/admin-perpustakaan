@@ -2,7 +2,7 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '@/context/AuthContext';
 import { useForm } from 'react-hook-form';
-
+import Image from 'next/image';
 const LoginPage = () => {
     let error = '';
     const { login } = useContext(AuthContext);
@@ -13,7 +13,7 @@ const LoginPage = () => {
     } = useForm();
 
     const onSubmit = async (data) => {
-        if (data.email == 'admin@mail.com') {
+        if (data.email.includes('@admin.com')) {
 
 
             try {
@@ -28,8 +28,10 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+            <Image className='m-8' width={150} height={150} src={"/f2399a3c-e44e-4e2a-82d0-520696ffad1b.png"} />
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+
                 <h1 className="text-3xl font-bold text-blue-950 mb-6">Login</h1>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-4">

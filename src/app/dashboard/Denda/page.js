@@ -12,6 +12,9 @@ import {
 } from 'firebase/firestore'
 import ToastComponent from '@/app/components/Toast';
 import ModalBook from '../../components/ModalBook';
+import { useForm, Controller } from 'react-hook-form';
+import { InputNumber } from 'primereact/inputnumber';
+import { Button } from 'primereact/button';
 
 const Denda = () => {
     const toast = useRef(null);
@@ -23,6 +26,9 @@ const Denda = () => {
     const [toastSeverity, setToastSeverity] = useState('success');
     const [idBook, setIdBook] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [dendaNominal, setDendaNominal] = useState('');
+
+    const { control, handleSubmit, setValue, formState: { errors } } = useForm();
     useEffect(() => {
         const getDataPeminjaman = async () => {
             try {
@@ -77,7 +83,30 @@ const Denda = () => {
             }
         };
 
+        const getDendaNominal = async () => {
+
+            const dendaRef = doc(db, 'denda', 'denda');
+
+
+            const unsubscribe = onSnapshot(dendaRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    setDendaNominal(data.nominal);
+                    setValue('nominal', data.nominal);
+                } else {
+                    console.log("Dokumen tidak ditemukan!");
+                }
+            }, (error) => {
+                console.error("Error mengambil data:", error);
+            });
+
+            return () => unsubscribe();
+
+        }
+
         getDataPeminjaman();
+
+        getDendaNominal();
 
     }, []);
     function padZero(number) {
@@ -137,7 +166,7 @@ const Denda = () => {
         const daysLate = daysPassed(inputDate);
 
         if (daysLate > 0) {
-            const fine = daysLate * 2000;
+            const fine = daysLate * dendaNominal;
             const finerStr = `Rp ${fine.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
             // Format hasil dalam rupiah
             return { finerStr, daysLate };
@@ -189,7 +218,21 @@ const Denda = () => {
 
     };
 
+    const onSubmit = async (data) => {
+        try {
 
+            const dendaRef = doc(db, 'denda', 'denda');
+            await updateDoc(dendaRef, { nominal: data.nominal });
+            toast.current.show({ severity: 'success', summary: 'Sukses', detail: 'Nominal Denda Berhasil Diupdate' });
+            console.log("Denda berhasil diupdate");
+        } catch (error) {
+            console.error("Error updating denda:", error);
+        }
+    };
+
+    if (dendaNominal === null) {
+        return <div>Loading...</div>;
+    }
     return (
         <>
             {
@@ -204,7 +247,47 @@ const Denda = () => {
                 />
             }
 
+            <div className='w-full p-4 '>
+                <div className='bg-blue-600 text-white font-semibold rounded-md p-4 flex justify-between'>
+                    <div className='p-4'>
+                        <p>     Denda Saat Ini</p>
+                        <div>
+                            {
+                                `Rp ${dendaNominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
+                            }/ hari
+                        </div>
 
+                    </div>
+
+
+                    <form onSubmit={handleSubmit(onSubmit)} className="p-4">
+                        <div className="mb-4">
+                            <label htmlFor="nominal" className="block mb-2">Nominal Denda</label>
+                            <Controller
+                                name="nominal"
+                                control={control}
+                                rules={{ required: 'Nominal denda wajib diisi' }}
+                                render={({ field, fieldState }) => (
+                                    <>
+                                        <InputNumber
+                                            id={field.name}
+                                            value={field.value}
+                                            onValueChange={(e) => field.onChange(e.value)}
+                                            mode="currency"
+                                            currency="IDR"
+                                            locale="id-ID"
+                                            className="w-full border p-2 border-gray-400 text-black"
+                                        />
+                                        {fieldState.error && <span className="text-red-500">{fieldState.error.message}</span>}
+                                    </>
+                                )}
+                            />
+                        </div>
+                        <Button type="submit" label="Update Denda" className="p-button-primary bg-green-600 p-2" />
+                    </form>
+                </div>
+
+            </div>
             <div className="border border-blue-300 border-rounded rounded-md m-4 p-4">
                 <DataTable
                     value={dataPeminjaman.filter(a => isDatePassed(a.tenggat) == true)}
@@ -239,3 +322,4 @@ const Denda = () => {
 }
 
 export default withAuth(Denda)
+
