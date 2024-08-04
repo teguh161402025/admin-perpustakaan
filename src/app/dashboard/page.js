@@ -5,7 +5,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { auth, db, storage } from '../../../firebase';
-import { collection, doc, getDocs, setDoc, getDoc, addDoc, onSnapshot, deleteDoc, query, where, updateDoc, arrayUnion, count } from 'firebase/firestore'
+import { collection, doc, getCountFromServer, getDocs, setDoc, getDoc, addDoc, onSnapshot, deleteDoc, query, where, updateDoc, arrayUnion, count } from 'firebase/firestore'
 import ToastComponent from '@/app/components/Toast';
 import ModalBook from '../components/ModalBook';
 const Home = () => {
@@ -93,12 +93,10 @@ const Home = () => {
 
     const getDataBukuCount = async () => {
 
-        const q = collection(db, 'Books');
+        const coll = collection(db, 'Books');
         try {
-            const querySnapshot = await getDocs(q);
-            const count = querySnapshot.size;
-
-            return count;
+            const snapshot = await getCountFromServer(coll);
+            return snapshot.data().count;
         } catch (error) {
             console.error('Error counting documents:', error);
             return 0;

@@ -172,7 +172,7 @@ const Pengambilan = () => {
 
             <div className="border border-blue-300 border-rounded rounded-md m-4 p-4">
                 <DataTable
-                    value={dataPeminjaman.filter(a => a.status === 'Disetujui')}
+                    value={dataPeminjaman.filter(a => a.status === 'Disetujui' && a.tenggat)}
                     paginator
                     stripedRows
                     rows={10}

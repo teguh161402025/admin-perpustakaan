@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
+            console.error('sedang login');
             // onAuthStateChanged akan menangani navigasi
         } catch (error) {
             console.error('Error during login:', error);
@@ -43,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             await signOut(auth);
-            router.replace('/login'); // atau halaman yang sesuai setelah logout
+            router.replace('/Login'); // atau halaman yang sesuai setelah logout
         } catch (error) {
             console.error('Error during logout:', error);
         }

@@ -15,7 +15,17 @@ import { Calendar } from 'primereact/calendar';
 import { Button } from 'primereact/button';
 
 const Addbook = () => {
-    const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
+    const defaultValues = {
+        title: '',
+        category: '',
+        description: '',
+        author: '',
+        synopsis: '',
+        stock: '',
+        publisher: '',
+        releaseDate: null,  // atau gunakan tanggal default, misal new Date()
+    };
+    const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm({ defaultValues: defaultValues });
     const [imageBase64, setImageBase64] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [showToast, setShowToast] = useState(false);
@@ -28,7 +38,7 @@ const Addbook = () => {
         const month = String(timestamp.getMonth() + 1).padStart(2, '0'); // Bulan di JavaScript dimulai dari 0
         const day = String(timestamp.getDate()).padStart(2, '0');
         const formattedDate = `${year}-${month}-${day}`;
-        const formData = { ...data, image: imageBase64, releaseDate: formattedDate, stock: parseInt(data.stock, 10) };
+        const formData = { ...data, image: imageBase64, releaseDate: year, stock: parseInt(data.stock, 10) };
         const docRef = collection(db, "Books");
         setIsLoading(true);
         try {
@@ -38,12 +48,12 @@ const Addbook = () => {
 
             setShowToast(true);
             setToastMessage('Berhasil Menambahkan Buku');
-            reset();
+            reset(defaultValues);
         } catch (error) {
             console.log(error.message);
         } finally {
             setIsLoading(false);
-            reset();
+            reset(defaultValues);
         }
         console.log(formData);
     };
@@ -79,6 +89,7 @@ const Addbook = () => {
                             name="title"
                             control={control}
                             rules={{ required: 'Judul buku wajib diisi' }}
+                            defaultValue=""
                             render={({ field }) => (
                                 <InputText
                                     id="title"
@@ -98,6 +109,7 @@ const Addbook = () => {
                             name="category"
                             control={control}
                             rules={{ required: 'Kategori wajib dipilih' }}
+                            defaultValue=""
                             render={({ field }) => (
                                 <Dropdown
                                     id="category"
@@ -118,6 +130,7 @@ const Addbook = () => {
                             name="description"
                             control={control}
                             rules={{ required: 'Keterangan wajib diisi' }}
+                            defaultValue=""
                             render={({ field }) => (
                                 <InputTextarea
                                     id="description"
@@ -152,6 +165,7 @@ const Addbook = () => {
                             name="author"
                             control={control}
                             rules={{ required: 'Pengarang wajib diisi' }}
+                            defaultValue=""
                             render={({ field }) => (
                                 <InputText
                                     id="author"
@@ -170,6 +184,7 @@ const Addbook = () => {
                         <Controller
                             name="synopsis"
                             control={control}
+                            defaultValue=""
                             rules={{ required: 'Sinopsis wajib diisi' }}
                             render={({ field }) => (
                                 <InputTextarea
@@ -189,6 +204,7 @@ const Addbook = () => {
                         <Controller
                             name="stock"
                             control={control}
+                            defaultValue="0"
                             rules={{ required: 'Stok wajib diisi', min: { value: 0, message: 'Stok tidak boleh negatif' } }}
                             render={({ field }) => (
                                 <InputText
@@ -209,6 +225,7 @@ const Addbook = () => {
                         <Controller
                             name="publisher"
                             control={control}
+                            defaultValue=""
                             rules={{ required: 'Penerbit wajib diisi' }}
                             render={({ field }) => (
                                 <InputText
