@@ -106,19 +106,31 @@ const Home = () => {
 
     const getDataKonfirmasiCount = async () => {
 
-        const q = query(collection(db, 'peminjaman'),
-            where('status', '==', 'Menunggu Konfirmasi'),
-            where('status_ditolak', '!=', 'Ditolak')
-        );
+        const q = query(collection(db, 'peminjaman'), where('status', '==', 'Menunggu Konfirmasi'));
+        const q2 = query(collection(db, 'peminjaman'), where('status_ditolak', '==', 'Ditolak'));
+        let count;
+        let count2;
         try {
             const querySnapshot = await getCountFromServer(q);
-            const count = querySnapshot.data().count;
+            count = querySnapshot.data().count;
 
-            return count;
+
         } catch (error) {
             console.error('Error counting documents:', error);
             return 0;
         }
+
+        try {
+            const querySnapshot = await getCountFromServer(q2);
+            count2 = querySnapshot.data().count;
+
+
+        } catch (error) {
+            console.error('Error counting documents:', error);
+            return 0;
+        }
+
+        return count - count2;
     }
 
 
