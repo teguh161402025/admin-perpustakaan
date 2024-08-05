@@ -106,7 +106,10 @@ const Home = () => {
 
     const getDataKonfirmasiCount = async () => {
 
-        const q = query(collection(db, 'peminjaman'), where('status', '==', 'Menunggu Konfirmasi'), where('status_ditolak', '!=', 'Ditolak'));
+        const q = query(collection(db, 'peminjaman'),
+            where('status', '==', 'Menunggu Konfirmasi'),
+            where('status_ditolak', '!=', 'Ditolak')
+        );
         try {
             const querySnapshot = await getCountFromServer(q);
             const count = querySnapshot.data().count;
