@@ -123,13 +123,13 @@ const Confirmation = () => {
                 stock: increment(-1)
 
             });
-            toast.current.show({ severity: 'success', summary: 'Sukses', detail: 'Peminjaman Telah Dikonfirmasi' });
+
 
         } catch (error) {
             console.log(error.message);
         }
 
-
+        toast.current.show({ severity: 'success', summary: 'Sukses', detail: 'Peminjaman Telah Dikonfirmasi' });
 
         console.log(showToast)
     }
