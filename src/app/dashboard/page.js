@@ -108,7 +108,7 @@ const Home = () => {
 
         const q = query(collection(db, 'peminjaman'), where('status', '==', 'Menunggu Konfirmasi'));
         try {
-            const querySnapshot = await getDocs(q);
+            const querySnapshot = await getCountFromServer(q);
             const count = querySnapshot.data().count;
 
             return count;
