@@ -109,7 +109,7 @@ const Home = () => {
         const q = query(collection(db, 'peminjaman'), where('status', '==', 'Menunggu Konfirmasi'));
         try {
             const querySnapshot = await getDocs(q);
-            const count = querySnapshot.size;
+            const count = querySnapshot.data().count;
 
             return count;
         } catch (error) {
