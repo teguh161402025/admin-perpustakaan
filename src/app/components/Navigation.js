@@ -137,6 +137,21 @@ export const Navigation = () => {
 
 
                         </div>
+
+                        <div className='text-gray-500 2xl:text-sm md:text-[10px] font-semibold pl-[17%]'>
+                            <Link href={'/dashboard/HistoryPengembalian'}>
+                                <div
+                                    className={`flex flex-row rounded-l-xl pl-4 space-x-6 p-2   hover:border-r-4 hover:border-r-purple-600 hover:bg-purple-100 hover:text-purple-600 transition-color duration-100 ease-in-out cursor-pointer
+                         ${currentPath === '/dashboard/HistoryPengembalian' ? 'border-r-4 border-r-purple-600 bg-purple-100 text-purple-600' : ''
+                                        }`}
+                                >
+                                    <FaClock size={18} className=' ' />
+                                    <div>History Pengembalian</div>
+                                </div>
+                            </Link>
+
+
+                        </div>
                     </div>
 
                     <div className='mt-2'>

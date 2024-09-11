@@ -30,65 +30,63 @@ const Denda = () => {
 
     const { control, handleSubmit, setValue, formState: { errors } } = useForm();
     useEffect(() => {
-        const getDataPeminjaman = async () => {
-            try {
-                const data = onSnapshot(
-                    query(collection(db, 'peminjaman'), where('status', '==', 'Dipinjam')),
-                    async (querySnapshot) => {
-                        const peminjamanData = [];
-                        const userDataPromises = [];
+        let unsubscribePeminjaman = null;
+        let unsubscribeDenda = null;
 
-                        querySnapshot.forEach((doc) => {
-                            const email = doc.data().email;
-                            const userDataPromise = new Promise((resolve, reject) => {
-                                onSnapshot(
-                                    query(collection(db, 'User'), where('email', '==', email)),
-                                    (userQuerySnapshot) => {
-                                        userQuerySnapshot.forEach((doc2) => {
-                                            peminjamanData.push({
-                                                ...doc.data(),
-                                                id: doc.id,
-                                                phone: doc2.data().phone,
-                                                address: doc2.data().address,
-                                                name: doc2.data().name,
-                                                grade: doc2.data().grade
-                                            });
+        const getDataPeminjaman = () => {
+            unsubscribePeminjaman = onSnapshot(
+                query(collection(db, 'peminjaman'), where('status', '==', 'Dipinjam')),
+                async (querySnapshot) => {
+                    const peminjamanData = [];
+                    const userDataPromises = [];
+
+                    querySnapshot.forEach((doc) => {
+                        const email = doc.data().email;
+                        const userDataPromise = new Promise((resolve, reject) => {
+                            const unsubscribeUser = onSnapshot(
+                                query(collection(db, 'User'), where('email', '==', email)),
+                                (userQuerySnapshot) => {
+                                    userQuerySnapshot.forEach((doc2) => {
+                                        peminjamanData.push({
+                                            ...doc.data(),
+                                            id: doc.id,
+                                            phone: doc2.data().phone,
+                                            address: doc2.data().address,
+                                            name: doc2.data().name,
+                                            grade: doc2.data().grade
                                         });
-                                        resolve();
-                                    },
-                                    (error) => {
-                                        reject(error);
-                                    }
-                                );
-                            });
-                            userDataPromises.push(userDataPromise);
+                                    });
+                                    resolve();
+                                    unsubscribeUser();
+                                },
+                                (error) => {
+                                    reject(error);
+                                    unsubscribeUser();
+                                }
+                            );
                         });
+                        userDataPromises.push(userDataPromise);
+                    });
 
-                        try {
-                            await Promise.all(userDataPromises);
-                            setDataPeminjaman(peminjamanData);
-                        } catch (error) {
-                            setError(error);
-                            console.error("Error fetching data:", error);
-                        }
-                    },
-                    (error) => {
+                    try {
+                        await Promise.all(userDataPromises);
+                        setDataPeminjaman(peminjamanData);
+                        await clearAndUpdateDaftarDenda(peminjamanData);
+                    } catch (error) {
                         setError(error);
                         console.error("Error fetching data:", error);
                     }
-                );
-            } catch (error) {
-                setError(error);
-                console.error("Error fetching data:", error);
-            }
+                },
+                (error) => {
+                    setError(error);
+                    console.error("Error fetching data:", error);
+                }
+            );
         };
 
-        const getDendaNominal = async () => {
-
+        const getDendaNominal = () => {
             const dendaRef = doc(db, 'denda', 'denda');
-
-
-            const unsubscribe = onSnapshot(dendaRef, (docSnap) => {
+            unsubscribeDenda = onSnapshot(dendaRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     setDendaNominal(data.nominal);
@@ -99,16 +97,44 @@ const Denda = () => {
             }, (error) => {
                 console.error("Error mengambil data:", error);
             });
+        };
 
-            return () => unsubscribe();
+        const clearAndUpdateDaftarDenda = async (peminjamanData) => {
+            try {
+                const daftarDendaRef = collection(db, 'daftar_denda');
+                const snapshot = await getDocs(daftarDendaRef);
+                const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
+                await Promise.all(deletePromises);
+                if (dendaNominal) {
+                    const addPromises = peminjamanData.map(item => {
+                        return addDoc(daftarDendaRef, {
+                            name: item.name,
+                            phone: item.phone,
+                            address: item.address,
+                            grade: item.grade,
+                            id_buku: item.id_buku,
+                            denda: calculateFine(item.tenggat).finerStr,
+                            tenggat: item.tenggat
+                        });
+                    });
+                }
+                await Promise.all(addPromises);
 
-        }
+                console.log("Daftar denda berhasil diperbarui");
+            } catch (error) {
+                console.error("Error updating daftar_denda:", error);
+            }
+        };
 
         getDataPeminjaman();
-
         getDendaNominal();
 
-    }, []);
+        return () => {
+            if (unsubscribePeminjaman) unsubscribePeminjaman();
+            if (unsubscribeDenda) unsubscribeDenda();
+        };
+    }, [dendaNominal]);
+
     function padZero(number) {
         return number < 10 ? '0' + number : number;
     }
@@ -167,6 +193,7 @@ const Denda = () => {
 
         if (daysLate > 0) {
             const fine = daysLate * dendaNominal;
+            console.log(fine)
             const finerStr = `Rp ${fine.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
             // Format hasil dalam rupiah
             return { finerStr, daysLate };
@@ -307,9 +334,9 @@ const Denda = () => {
                     <Column field="phone" header="telepon" sortable className="font-semibold"></Column>
                     <Column field="address" header="Alamat" sortable className="font-semibold"></Column>
                     <Column body={titleTemplate} header="Judul" sortable className="font-semibold"></Column>
-                    <Column field="durasi" header="Durasi(hari)" sortable className="font-semibold"></Column>
+
                     <Column field="pengambilan" header="Tanggal Pengambilan" sortable className="font-semibold"></Column>
-                    <Column field="tenggat" header="Batas Pengembalian" sortable className="font-semibold"></Column>
+                    <Column field="tenggat" header="Tanggal Pengembalian" sortable className="font-semibold"></Column>
                     <Column header="Jumlah Hari yang Lewat" body={fineTemplatebyDay}></Column>
                     <Column header="Nominal Denda" body={fineTemplate}></Column>
                     <Column header="Pesetujuan" body={confirmationTemplate}></Column>

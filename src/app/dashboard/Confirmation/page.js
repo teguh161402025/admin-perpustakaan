@@ -162,7 +162,7 @@ const Confirmation = () => {
             console.log(error.message);
         }
     }
-
+    console.log(dataPeminjaman);
     const confirmationTemplate = (data) => {
         return <div className='flex space-x-4'>
             <div onClick={() => handleConfirmation(data.id, data.durasi, data.id_buku)} className='bg-blue-500 py-2 text-center text-white px-8 cursor-pointer hover:transition-color hover:bg-blue-700 transition ease-in-out duration-500 w-44 rounded-md'>Konfirmasi</div>
@@ -224,8 +224,10 @@ const Confirmation = () => {
                     visible={modalVisible}
                     onClose={closeModal}
                 />
-            }
 
+
+            }
+            { }
 
             <div className="border border-blue-300 border-rounded rounded-md m-4 p-4">
                 <DataTable

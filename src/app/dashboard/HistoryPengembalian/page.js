@@ -11,7 +11,7 @@ import ModalBook from '../../components/ModalBook';
 import { Dropdown } from 'primereact/dropdown';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-const History = () => {
+const HistoryPengembalian = () => {
     const formatTanggalSekarang = () => {
         // Buat objek Date baru untuk tanggal saat ini
         const sekarang = new Date();
@@ -57,7 +57,7 @@ const History = () => {
         const getDataPeminjaman = async () => {
             try {
                 const data = onSnapshot(
-                    query(collection(db, 'peminjaman'), where('status', '==', 'Dipinjam')),
+                    query(collection(db, 'peminjaman'), where('status', '==', 'Telah Dikembalikan')),
                     async (querySnapshot) => {
                         const peminjamanData = [];
                         const userDataPromises = [];
@@ -117,8 +117,8 @@ const History = () => {
 
         // Judul PDF
         const title = selectedMonth
-            ? `Daftar Peminjaman - ${new Date(selectedMonth + '-01').toLocaleString('id-ID', { year: 'numeric', month: 'long' })}`
-            : 'Daftar Peminjaman ' + formatTanggalSekarang();
+            ? `Daftar Pengembalian - ${new Date(selectedMonth + '-01').toLocaleString('id-ID', { year: 'numeric', month: 'long' })}`
+            : 'Daftar Pengembalian ' + formatTanggalSekarang();
         doc.text(title, 14, 10);
 
         // Tabel
@@ -200,7 +200,7 @@ const History = () => {
     const header = (
         <div className="flex justify-between items-center mb-4">
             <div className="flex items-center">
-                <h5 className="text-lg font-semibold mr-4">Daftar Peminjaman {formatTanggalSekarang()}</h5>
+                <h5 className="text-lg font-semibold mr-4">Daftar Pengembalian {formatTanggalSekarang()}</h5>
                 <button
                     onClick={generatePDF}
                     className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
@@ -275,4 +275,4 @@ const History = () => {
     )
 }
 
-export default withAuth(History)
+export default withAuth(HistoryPengembalian)

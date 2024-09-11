@@ -189,9 +189,8 @@ const Pengambilan = () => {
                     <Column field="phone" header="telepon" sortable className="font-semibold"></Column>
                     <Column field="address" header="Alamat" sortable className="font-semibold"></Column>
                     <Column body={titleTemplate} header="Judul" sortable className="font-semibold"></Column>
-                    <Column field="durasi" header="Durasi(hari)" sortable className="font-semibold"></Column>
                     <Column field="pengambilan" header="Tanggal Pengambilan" sortable className="font-semibold"></Column>
-                    <Column field="tenggat" header="Batas Pengembalian" sortable className="font-semibold"></Column>
+                    <Column field="tenggat" header="Tanggal Pengembalian" sortable className="font-semibold"></Column>
                     <Column header="Pesetujuan" body={confirmationTemplate}></Column>
                 </DataTable>
             </div>
