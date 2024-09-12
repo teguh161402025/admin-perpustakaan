@@ -160,10 +160,10 @@ const Pengembalian = () => {
     };
     const titleTemplate = (data) => {
         return <div
-            onClick={() => { setIdBook(rowData.id_buku); openModal(); }}
+            onClick={() => { setIdBook(data.id_buku); openModal(); }}
             className='font-bold cursor-pointer text-blue-600 hover:transition-color duration-200'
         >
-            {rowData.judul}
+            {data.judul}
         </div>
     };
 
