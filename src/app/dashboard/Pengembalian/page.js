@@ -134,6 +134,10 @@ const Pengembalian = () => {
 
         return inputDate < today;
     }
+
+    const titleTemplate = (rowData) => {
+        return rowData.title; // Mengembalikan nilai judul langsung
+    };
     const headerConfirmation = (
         <div className="flex justify-between items-center mb-4">
             <h5 className="text-lg font-semibold">Daftar Menunggu Pengembalian Buku </h5>
@@ -178,7 +182,7 @@ const Pengembalian = () => {
 
             <div className="border border-blue-300 border-rounded rounded-md m-4 p-4">
                 <DataTable
-                    value={dataPeminjaman.filter(a => isDatePassed(a.tenggat) == false)}
+                    value={dataPeminjaman.filter(a => !isDatePassed(a.tenggat))}
                     paginator
                     stripedRows
                     rows={10}
@@ -188,17 +192,16 @@ const Pengembalian = () => {
                     globalFilter={globalFilter}
                     header={headerConfirmation}
                     sortMode="multiple"
-
                 >
-                    <Column field="name" header="Peminjam" sortable className="font-semibold"></Column>
-                    <Column field="grade" header="Kelas" sortable className="font-semibold"></Column>
-                    <Column field="phone" header="telepon" sortable className="font-semibold"></Column>
-                    <Column field="address" header="Alamat" sortable className="font-semibold"></Column>
-                    <Column body={titleTemplate} header="Judul" sortable className="font-semibold"></Column>
-                    <Column field="durasi" header="Durasi(hari)" sortable className="font-semibold"></Column>
-                    <Column field="pengambilan" header="Tanggal Pengambilan" sortable className="font-semibold"></Column>
-                    <Column field="tenggat" header="Batas Pengembalian" sortable className="font-semibold"></Column>
-                    <Column header="Pesetujuan" body={confirmationTemplate}></Column>
+                    <Column field="name" header="Peminjam" sortable className="font-semibold" />
+                    <Column field="grade" header="Kelas" sortable className="font-semibold" />
+                    <Column field="phone" header="telepon" sortable className="font-semibold" />
+                    <Column field="address" header="Alamat" sortable className="font-semibold" />
+                    <Column field="title" header="Judul" body={titleTemplate} sortable className="font-semibold" />
+                    <Column field="durasi" header="Durasi(hari)" sortable className="font-semibold" />
+                    <Column field="pengambilan" header="Tanggal Pengambilan" sortable className="font-semibold" />
+                    <Column field="tenggat" header="Batas Pengembalian" sortable className="font-semibold" />
+                    <Column header="Pesetujuan" body={confirmationTemplate} />
                 </DataTable>
             </div>
 
