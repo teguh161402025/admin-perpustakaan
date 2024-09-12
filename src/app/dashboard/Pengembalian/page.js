@@ -135,9 +135,7 @@ const Pengembalian = () => {
         return inputDate < today;
     }
 
-    const titleTemplate = (rowData) => {
-        return rowData.title; // Mengembalikan nilai judul langsung
-    };
+
     const headerConfirmation = (
         <div className="flex justify-between items-center mb-4">
             <h5 className="text-lg font-semibold">Daftar Menunggu Pengembalian Buku </h5>
@@ -161,8 +159,12 @@ const Pengembalian = () => {
         setModalVisible(false);
     };
     const titleTemplate = (data) => {
-        return <div onClick={() => { setIdBook(data.id_buku); openModal(); }} className='font-bold cursor-pointer text-blue-600 hover:transition-color duration-200 '>{data.judul}</div>
-
+        return <div
+            onClick={() => { setIdBook(rowData.id_buku); openModal(); }}
+            className='font-bold cursor-pointer text-blue-600 hover:transition-color duration-200'
+        >
+            {rowData.judul}
+        </div>
     };
 
     return (
@@ -197,7 +199,7 @@ const Pengembalian = () => {
                     <Column field="grade" header="Kelas" sortable className="font-semibold" />
                     <Column field="phone" header="telepon" sortable className="font-semibold" />
                     <Column field="address" header="Alamat" sortable className="font-semibold" />
-                    <Column field="title" header="Judul" body={titleTemplate} sortable className="font-semibold" />
+                    <Column field="judul" header="Judul" body={titleTemplate} sortable className="font-semibold" />
                     <Column field="durasi" header="Durasi(hari)" sortable className="font-semibold" />
                     <Column field="pengambilan" header="Tanggal Pengambilan" sortable className="font-semibold" />
                     <Column field="tenggat" header="Batas Pengembalian" sortable className="font-semibold" />
